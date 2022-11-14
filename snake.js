@@ -7,8 +7,11 @@ class Snake {
   })
 
   constructor(ctx, grid, apple, color) {
-    this.body = [{ x: randInt(parseInt(grid.size.cols / 4), parseInt(grid.size.cols / 1.5)), y: randInt(parseInt(grid.size.rows / 4), parseInt(grid.size.rows / 1.5)) }];
-    this.speed = { x: 1, y: 0 };
+    this.body = [{
+      x: randInt(parseInt(grid.size.cols / 4), parseInt(grid.size.cols / 1.5)),
+      y: randInt(parseInt(grid.size.rows / 4), parseInt(grid.size.rows / 1.5)),
+    }];
+    this.speed = { x: 0, y: 0 };
     this.color = color;
     this.movDir = Snake.Directions.Right;
     this.allowMove = 1;
@@ -48,20 +51,20 @@ class Snake {
   }
 
   move() {
-    if (this.body.length == 1) {
-      this.body[0].x += this.speed.x;
-      this.body[0].y += this.speed.y;
-    } else {
-      this.body.pop();
-      this.body.unshift({
-        x: this.body[0].x + this.speed.x,
-        y: this.body[0].y + this.speed.y
-      });
-    }
-
-    if (this.body[0].x == this.apple.position.x && this.body[0].y == this.apple.position.y) {
+    if (collision(this.body[0], this.apple.position)) {
       this.apple.generateRandom();
       this.extend();
+    } else {
+      if (this.body.length == 1) {
+        this.body[0].x += this.speed.x;
+        this.body[0].y += this.speed.y;
+      } else {
+        this.body.pop();
+        this.body.unshift({
+          x: this.body[0].x + this.speed.x,
+          y: this.body[0].y + this.speed.y
+        });
+      }
     }
   }
 
@@ -70,6 +73,12 @@ class Snake {
       x: this.body[0].x + this.speed.x,
       y: this.body[0].y + this.speed.y
     });
+  }
+  // For testing.
+  extendX(x) {
+    for (let i = 0; i < x; ++i) {
+      snake.body.push({x: -1, y: -1})
+    }
   }
 
   drawHead() {
@@ -138,7 +147,7 @@ class Snake {
 
     let selfCollision = false;
     for (let i = 1; i < this.body.length && !selfCollision; ++i) {
-      selfCollision = (this.body[0].x === this.body[i].x && this.body[0].y === this.body[i].y);
+      selfCollision = collision(this.body[0], this.body[i]);
     }
 
     return inRangeX && inRangeY && !selfCollision;
