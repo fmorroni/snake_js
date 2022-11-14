@@ -1,0 +1,33 @@
+.container {
+  background-color: hsl(0deg 0% 15%);
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+#canvas-div {
+  margin-top: 5rem;
+}
+
+#game-over {
+  position: absolute;
+  color: white;
+  font-size: 5rem;
+  margin-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+.restart-button {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-image: url('./images/restar_symbol.png');
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
