@@ -11,6 +11,14 @@ ctx.setUp = function() {
       case 'KeyS': case 'ArrowDown': snake.moveDown(); break;
       case 'KeyA': case 'ArrowLeft': snake.moveLeft(); break;
       case 'KeyD': case 'ArrowRight': snake.moveRight(); break;
+      // case 'ArrowUp': snake.moveUp(); break;
+      // case 'KeyW': snake2.moveUp(); break;
+      // case 'ArrowDown': snake.moveDown(); break;
+      // case 'KeyS': snake2.moveDown(); break;
+      // case 'ArrowLeft': snake.moveLeft(); break;
+      // case 'KeyA': snake2.moveLeft(); break;
+      // case 'ArrowRight': snake.moveRight(); break;
+      // case 'KeyD': snake2.moveRight(); break;
     }
   });
 }
@@ -24,7 +32,8 @@ let canvasSize = 1200;
 grid.setCanvasDims(canvasSize, canvasSize / 1.5);
 
 let apple = new Apple(ctx, grid);
-let snake = new Snake(ctx, grid, apple);
+let snake = new Snake(ctx, grid, apple, 'green');
+// let snake2 = new Snake(ctx, grid, apple, 'blue');
 
 let prevTimestamp = 0, frameStep = 50;
 function animate(timestamp = 50) {
@@ -60,8 +69,10 @@ restarButton.onclick = () => {
 }
 
 function play() {
+  if (!snake.isAlive) {
+    snake = snake.reset();
+  }
   ctx.setUp();
-  snake = snake.reset();
   animate();
 }
 

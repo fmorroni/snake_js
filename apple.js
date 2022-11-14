@@ -18,7 +18,3 @@ class Apple {
     this.grid.fillSquare(this.position, this.color);
   }
 }
-
-function randInt(min, max) {
-    return Math.floor(Math.random()*(max - min + 1) + min)
-}

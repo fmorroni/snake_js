@@ -6,10 +6,10 @@ class Snake {
     Right: Symbol("Right")
   })
 
-  constructor(ctx, grid, apple) {
-    this.body = [{ x: parseInt(grid.size.cols/2), y: parseInt(grid.size.rows/2) }];
+  constructor(ctx, grid, apple, color) {
+    this.body = [{ x: randInt(parseInt(grid.size.cols / 4), parseInt(grid.size.cols / 1.5)), y: randInt(parseInt(grid.size.rows / 4), parseInt(grid.size.rows / 1.5)) }];
     this.speed = { x: 1, y: 0 };
-    this.color = 'green';
+    this.color = color;
     this.movDir = Snake.Directions.Right;
     this.allowMove = 1;
 
@@ -107,22 +107,18 @@ class Snake {
       case Snake.Directions.Up:
         this.ctx.fillRect(...ulc, eyeSize, eyeSize);
         this.ctx.fillRect(...urc, eyeSize, eyeSize);
-        // console.log('Moving up', ulc, urc);
         break;
       case Snake.Directions.Down:
         this.ctx.fillRect(...blc, eyeSize, eyeSize);
         this.ctx.fillRect(...brc, eyeSize, eyeSize);
-        // console.log('Moving down', blc, brc);
         break;
       case Snake.Directions.Left:
         this.ctx.fillRect(...ulc, eyeSize, eyeSize);
         this.ctx.fillRect(...blc, eyeSize, eyeSize);
-        // console.log('Moving left', ulc, blc);
         break;
       case Snake.Directions.Right:
         this.ctx.fillRect(...urc, eyeSize, eyeSize);
         this.ctx.fillRect(...brc, eyeSize, eyeSize);
-        // console.log('Moving right', urc, brc);
         break;
     }
 
@@ -149,6 +145,6 @@ class Snake {
   }
 
   reset() {
-    return new Snake(this.ctx, this.grid, this.apple);
+    return new Snake(this.ctx, this.grid, this.apple, this.color);
   }
 }
