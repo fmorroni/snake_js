@@ -77,7 +77,7 @@ class Snake {
   // For testing.
   extendX(x) {
     for (let i = 0; i < x; ++i) {
-      snake.body.push({x: -1, y: -1})
+      this.body.push({x: -1, y: -1})
     }
   }
 

@@ -5,22 +5,23 @@ canvasDiv.appendChild(canvas);
 const ctx = canvas.getContext('2d');
 ctx.setUp = function() {
   this.lineWidth = 1;
-  window.addEventListener('keydown', event => {
-    switch (event.code) {
-      case 'KeyW': case 'ArrowUp': snake.moveUp(); break;
-      case 'KeyS': case 'ArrowDown': snake.moveDown(); break;
-      case 'KeyA': case 'ArrowLeft': snake.moveLeft(); break;
-      case 'KeyD': case 'ArrowRight': snake.moveRight(); break;
-      // case 'ArrowUp': snake.moveUp(); break;
-      // case 'KeyW': snake2.moveUp(); break;
-      // case 'ArrowDown': snake.moveDown(); break;
-      // case 'KeyS': snake2.moveDown(); break;
-      // case 'ArrowLeft': snake.moveLeft(); break;
-      // case 'KeyA': snake2.moveLeft(); break;
-      // case 'ArrowRight': snake.moveRight(); break;
-      // case 'KeyD': snake2.moveRight(); break;
-    }
-  });
+  window.addEventListener('keydown', keySetup);
+}
+function keySetup(key) {
+  switch (key.code) {
+    case 'KeyW': case 'ArrowUp': snake.moveUp(); break;
+    case 'KeyS': case 'ArrowDown': snake.moveDown(); break;
+    case 'KeyA': case 'ArrowLeft': snake.moveLeft(); break;
+    case 'KeyD': case 'ArrowRight': snake.moveRight(); break;
+    // case 'ArrowUp': snake.moveUp(); break;
+    // case 'KeyW': snake2.moveUp(); break;
+    // case 'ArrowDown': snake.moveDown(); break;
+    // case 'KeyS': snake2.moveDown(); break;
+    // case 'ArrowLeft': snake.moveLeft(); break;
+    // case 'KeyA': snake2.moveLeft(); break;
+    // case 'ArrowRight': snake.moveRight(); break;
+    // case 'KeyD': snake2.moveRight(); break;
+  }
 }
 ctx.blankCanvas = function(color = window.getComputedStyle(document.body, null).getPropertyValue('background-color')) {
   this.fillStyle = color;
@@ -36,7 +37,7 @@ let snake = new Snake(ctx, grid, apple, 'green');
 // let snake2 = new Snake(ctx, grid, apple, 'blue');
 
 let prevTimestamp = 0, frameStep = 50;
-function animate(timestamp = 50) {
+function animate(timestamp = frameStep) {
   if (snake.isAlive) {
     if (timestamp - prevTimestamp >= frameStep) {
       ctx.blankCanvas();
@@ -54,6 +55,7 @@ function animate(timestamp = 50) {
   } else {
     gameOverDiv.appendChild(gameOverMsg);
     gameOverDiv.appendChild(restarButton);
+    startSignal = false;
   }
 }
 
@@ -68,12 +70,41 @@ restarButton.onclick = () => {
   play();
 }
 
+let startSignal = false;
+function start(key) {
+  switch (key.code) {
+    case 'KeyW': case 'ArrowUp':
+    case 'KeyS': case 'ArrowDown':
+    case 'KeyA': case 'ArrowLeft':
+    case 'KeyD': case 'ArrowRight':
+      startSignal = true;
+      play();
+  }
+}
+
+function drawInitial() {
+  ctx.blankCanvas();
+  grid.draw();
+  apple.draw();
+  snake.draw();
+}
+function prepGame() {
+  drawInitial();
+  ctx.setUp();
+  window.addEventListener('keydown', start);
+}
+
 function play() {
   if (!snake.isAlive) {
     snake = snake.reset();
   }
-  ctx.setUp();
-  animate();
+  if (!startSignal) {
+    window.addEventListener('keydown', start);
+    drawInitial();
+  } else {
+    window.removeEventListener('keydown', start);
+    animate();
+  }
 }
 
-play()
+prepGame();
