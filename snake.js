@@ -77,8 +77,36 @@ class Snake {
   // For testing.
   extendX(x) {
     for (let i = 0; i < x; ++i) {
-      this.body.push({x: -1, y: -1})
+      this.body.push({ x: -1, y: -1 })
     }
+  }
+
+  drawSegmentLine({ segmentIndex, horizontal = false, vertical = false } = {}) {
+    this.ctx.save();
+    this.ctx.strokeStyle = this.color * 1.5;
+    if (horizontal) {
+      // Middle Left
+      let ml = [
+        this.grid.side * this.body[segmentIndex].x + this.ctx.lineWidth,
+        this.grid.side * (this.body[segmentIndex].y + 0.5) + this.ctx.lineWidth / 2,
+      ];
+      // Middle Right
+      let mr = [ml[0] + this.grid.side, ml[1]];
+      this.ctx.moveTo(...ml);
+      this.ctx.lineTo(...mr);
+    } else if (vertical) {
+      // Middle Up
+      let mu = [
+        this.grid.side * (this.body[segmentIndex].x + 0.5) + this.ctx.lineWidth / 2,
+        this.grid.side * this.body[segmentIndex].y + this.ctx.lineWidth,
+      ];
+      // Middle Down
+      let md = [mu[0], mu[1] + this.grid.side];
+      this.ctx.moveTo(...mu);
+      this.ctx.lineTo(...md);
+    }
+    this.ctx.stroke();
+    this.ctx.restore();
   }
 
   drawHead() {
@@ -138,6 +166,11 @@ class Snake {
     this.drawHead();
     for (let i = 1; i < this.body.length; ++i) {
       this.grid.fillSquare(this.body[i], this.color);
+      if (this.body[i].x === this.body[i-1].x) {
+        this.drawSegmentLine({segmentIndex: i, vertical: true});
+      } else if (this.body[i].y === this.body[i-1].y) {
+        this.drawSegmentLine({segmentIndex: i, horizontal: true});
+      }
     }
   }
 
