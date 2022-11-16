@@ -11,7 +11,7 @@
   margin-top: 5rem;
 }
 
-#game-over {
+#game-over, #pause {
   position: absolute;
   color: white;
   font-size: 5rem;
@@ -22,7 +22,7 @@
   align-items: center;
 }
 
-.restart-button {
+.restart-button, .unpause-button {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
